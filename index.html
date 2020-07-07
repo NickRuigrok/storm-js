@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="./index.js"></script>
+</head>
+<body>
+<div id="app">
+  <div --loop="@data">
+    <label --innerHTML="data:@.project_name"  --data-customAttr="data:@.project_name"></label>
+    <input id="input" type="text" --value="data:@.planners.@.name" placeholder="Project name" />
+  </div>
+</div>
+
+<script>
+  const response = [
+    {
+      project_name: "Lorem ipsum #1",
+      planners: [
+        {
+          name: 'Nick',
+          clients: [
+            { name: 'Client 1' },
+            { name: 'Client 2' },
+            { name: 'Client 3' },
+            { name: 'Client 4' },
+            { name: 'Client 5' },
+          ]
+        }
+      ]
+    },
+    {
+      project_name: "Lorem ipsum #2",
+      planners: [
+        {
+          name: 'Nick',
+          clients: [
+            { name: 'Client 1' },
+            { name: 'Client 2' },
+            { name: 'Client 3' },
+            { name: 'Client 4' },
+            { name: 'Client 5' },
+          ]
+        }
+      ]
+    },
+    {
+      project_name: "Lorem ipsum #3",
+      planners: [
+        {
+          name: 'Nick',
+          clients: [
+            { name: 'Client 1' },
+            { name: 'Client 2' },
+            { name: 'Client 3' },
+            { name: 'Client 4' },
+            { name: 'Client 5' },
+          ]
+        }
+      ]
+    }
+  ];
+
+  const data = {
+    test: "Test",
+  };
+
+  const storm = new Storm();
+  storm.setState({ ...storm.state, data: response });
+  storm.defineAttribute('customAttr');
+  storm.initialize('#app');
+</script>
+</body>
+</html>
