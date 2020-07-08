@@ -11,7 +11,7 @@ class Storm {
 
     let element, attributes, arr = [];
     const regex = new RegExp('^--', 'i'),
-      customAttributes = ['className', 'innerHTML', 'innerText'].concat(this.customAttributes),
+      customAttributes = ['className', 'innerHTML', 'innerText', 'htmlFor'].concat(this.customAttributes),
       elements = document.querySelector(container).getElementsByTagName('*');
 
     for(let i = 0; i < elements.length; i++) {

@@ -8,8 +8,8 @@
 <body>
 <div id="app">
   <div --loop="@data">
-    <label --innerHTML="data:@.project_name"  --data-customAttr="data:@.project_name"></label>
-    <input id="input" type="text" --value="data:@.planners.@.name" placeholder="Project name" />
+    <label --innerHTML="data:@.project_name" --htmlFor="data:@.project_name"  --data-customAttr="data:@.project_name"></label>
+    <input id="input" type="text" --value="data:@.planners.0.clients.@.name" placeholder="Project name" />
   </div>
 </div>
 
@@ -67,7 +67,7 @@
   };
 
   const storm = new Storm();
-  storm.setState({ ...storm.state, data: response });
+  storm.setState({ data: response });
   storm.defineAttribute('customAttr');
   storm.initialize('#app');
 </script>
