@@ -1,13 +1,18 @@
 class Storm {
+  #store;
   constructor() {
     this.container = 'body';
     this.elements = [];
     this.customAttributes = [];
     this.state = {};
+    this.#store = performance.navigation.type !== 1 ?  JSON.parse(window.sessionStorage.getItem('storm-js')) : {};
   }
 
   initialize(container = 'body') {
     this.container = container;
+
+    window.onbeforeunload = () => window.sessionStorage.setItem('storm-js', JSON.stringify(this.#store));
+    window.sessionStorage.removeItem('storm-js');
 
     let element, attributes, arr = [];
     const regex = new RegExp('^--', 'i'),
@@ -44,10 +49,9 @@ class Storm {
   }
 
   loop(element, attribute) {
-    let loopCount;
-    if(attribute.value.indexOf('@') > -1) {
-      const str = attribute.value.replace(/^@/, '');
-      loopCount = Number(this.state[str].length);
+    let loopCount, attributeValue = this.state[attribute.value] || this.#store[attribute.value];
+    if(isNaN(Number(attribute.value))) {
+      loopCount = attributeValue.length || Number(attributeValue);
     } else {
       loopCount = Number(attribute.value);
     }
@@ -99,8 +103,8 @@ class Storm {
 
       for(let j = 0; j < attributes.length; j++) {
         attributes[j].name.indexOf('data-') === -1
-          ? element[attributes[j].name] = this.resolve(attributes[j].value, this.state[attributes[j].obj])
-          : element.setAttribute(attributes[j].name, this.resolve(attributes[j].value, this.state[attributes[j].obj]));
+          ? element[attributes[j].name] = this.resolve(attributes[j].value, this.state[attributes[j].obj] || this.#store[attributes[j].obj])
+          : element.setAttribute(attributes[j].name, this.resolve(attributes[j].value, this.state[attributes[j].obj] || this.#store[attributes[j].obj]));
         element.removeAttribute(`--${attributes[j].name}`);
       }
     }
@@ -115,10 +119,22 @@ class Storm {
     this.state = value;
   }
 
-  store(key, value) {}
+  store() {
+    return {
+      add: (key, value) => this.#store[key] = value,
+      remove: (key) => delete this.#store[key],
+      set: (value) => this.#store = value
+    }
+  }
 
   defineAttribute(value) {
-    this.customAttributes.push(`data-${value}`);
+    if(Array.isArray(value)) {
+      for(let i = 0; i < value.length; i++) {
+        this.customAttributes.push(`data-${value[i]}`);
+      }
+    } else {
+      this.customAttributes.push(`data-${value}`);
+    }
   }
 }
 

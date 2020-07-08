@@ -1,11 +1,11 @@
 const webpack = require('webpack');
 
 module.exports = {
-  entry: ['./index.js'],
+  entry: './index.js',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
