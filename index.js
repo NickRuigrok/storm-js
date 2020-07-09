@@ -5,7 +5,7 @@ class Storm {
     this.elements = [];
     this.customAttributes = [];
     this.state = {};
-    this.#store = performance.navigation.type !== 1 ?  JSON.parse(window.sessionStorage.getItem('storm-js')) : {};
+    this.#store = JSON.parse(window.sessionStorage.getItem('storm-js') || '{}');
   }
 
   initialize(container = 'body') {
@@ -123,7 +123,8 @@ class Storm {
     return {
       add: (key, value) => this.#store[key] = value,
       remove: (key) => delete this.#store[key],
-      set: (value) => this.#store = value
+      set: (value) => this.#store = value,
+      clear: () => this.#store = {}
     }
   }
 
