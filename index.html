@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  <script src="./index.js"></script>
+  <script src="./dist/storm.js"></script>
 </head>
 <body>
 <div id="app">
@@ -12,7 +12,7 @@
     <input id="input" type="text" --value="data:@.planners.@.name" placeholder="Project name" />
   </div>
   <a href="demo.html">Click here</a>
-  <button onclick="storm.store().remove('data')">Remove</button>
+  <button onclick="storm.store.remove('data')">Remove</button>
 </div>
 
 <script>
@@ -71,8 +71,6 @@
   const storm = new Storm();
   storm.setState({ ...storm.state, data: response, loopCount: 5 });
   storm.defineAttribute(['attr-1', 'attr-2', 'attr-3']);
-
-  storm.store().add('data', response);
 
   storm.initialize('#app');
 </script>

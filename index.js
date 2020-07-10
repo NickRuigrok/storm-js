@@ -1,18 +1,18 @@
-class Storm {
-  #store;
+import Store from './src/Store';
+
+class Sturm {
   constructor() {
     this.container = 'body';
     this.elements = [];
     this.customAttributes = [];
     this.state = {};
-    this.#store = JSON.parse(window.sessionStorage.getItem('storm-js') || '{}');
+    this.store = {};
   }
 
   initialize(container = 'body') {
     this.container = container;
 
-    window.onbeforeunload = () => window.sessionStorage.setItem('storm-js', JSON.stringify(this.#store));
-    window.sessionStorage.removeItem('storm-js');
+    this.store = new Store();
 
     let element, attributes, arr = [];
     const regex = new RegExp('^--', 'i'),
@@ -49,7 +49,7 @@ class Storm {
   }
 
   loop(element, attribute) {
-    let loopCount, attributeValue = this.state[attribute.value] || this.#store[attribute.value];
+    let loopCount, attributeValue = this.state[attribute.value];
     if(isNaN(Number(attribute.value))) {
       loopCount = attributeValue.length || Number(attributeValue);
     } else {
@@ -103,8 +103,8 @@ class Storm {
 
       for(let j = 0; j < attributes.length; j++) {
         attributes[j].name.indexOf('data-') === -1
-          ? element[attributes[j].name] = this.resolve(attributes[j].value, this.state[attributes[j].obj] || this.#store[attributes[j].obj])
-          : element.setAttribute(attributes[j].name, this.resolve(attributes[j].value, this.state[attributes[j].obj] || this.#store[attributes[j].obj]));
+          ? element[attributes[j].name] = this.resolve(attributes[j].value, this.state[attributes[j].obj])
+          : element.setAttribute(attributes[j].name, this.resolve(attributes[j].value, this.state[attributes[j].obj]));
         element.removeAttribute(`--${attributes[j].name}`);
       }
     }
@@ -119,15 +119,6 @@ class Storm {
     this.state = value;
   }
 
-  store() {
-    return {
-      add: (key, value) => this.#store[key] = value,
-      remove: (key) => delete this.#store[key],
-      set: (value) => this.#store = value,
-      clear: () => this.#store = {}
-    }
-  }
-
   defineAttribute(value) {
     if(Array.isArray(value)) {
       for(let i = 0; i < value.length; i++) {
@@ -139,4 +130,5 @@ class Storm {
   }
 }
 
-window.Storm = Storm;
+window.Storm = Sturm;
+window.Sturm = Sturm;
